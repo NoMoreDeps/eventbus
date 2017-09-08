@@ -15,10 +15,11 @@
   "devDependencies": {
     "@types/jest": "^20.0.8",
     "jest": "^21.0.1",
-    "ts-jest": "^21.0.0"
+    "ts-jest": "^21.0.0",
+    "typescript": "^2.5.2"
   },
   "jest": {
-    "mapCoverage":true,
+    "mapCoverage": true,
     "verbose": true,
     "globals": {
       "ts-jest": {
