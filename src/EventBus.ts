@@ -19,6 +19,18 @@
 export class EventBus {
   // Protected fields
 
+  protected get _errors() {
+    const $this = this;
+
+    return {
+      get eventNameBadFormat(): string {
+        return `The event name is not in the correct format : 
+Should be in '${$this._depthLevel}' part${$this._depthLevel > 1 ? "s" : ""} 
+${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
+      }
+    }
+  }
+
   /**
    * @field {string} _separator
    */
@@ -28,6 +40,13 @@ export class EventBus {
    * @field {number} _depthLevel
    */
   protected _depthLevel: number;
+
+  // Protected functions
+  protected checkEventNameFormat(eventName: string = void 0): boolean {
+    return eventName &&
+      eventName.trim().length > 0 &&
+      eventName.split(this._separator).length <= this._depthLevel;
+  }
 
   /**
    * @constructor
@@ -42,9 +61,9 @@ export class EventBus {
     if (depthLevel < 1) {
       depthLevel = 1;
     }
-    
-    this._separator  = separator  ;
-    this._depthLevel = depthLevel ;
+
+    this._separator = separator;
+    this._depthLevel = depthLevel;
   }
 
   /**
@@ -77,5 +96,17 @@ export class EventBus {
 
     this._depthLevel = value;
   }
+
+  /**
+   * Subscribe on an event
+   * @param {string} eventName 
+   * @param {string} handler 
+   */
+  on(eventName: string, handler: Function): void {
+    if (!this.checkEventNameFormat(eventName)) {
+      throw Error(this._errors.eventNameBadFormat);
+    }
+  }
+
 }
 
