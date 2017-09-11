@@ -16,6 +16,20 @@
 * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+type Pool = { 
+  [key: string]: PoolValue;
+};
+
+type PoolValue = { 
+  items : Array<PoolItem> ; 
+  pool  : Pool            ; 
+};
+
+type PoolItem = { 
+  originalHandler  : Function; 
+  decoratedHandler : Function;
+};
+
 export class EventBus {
   // Protected fields
 
@@ -41,11 +55,32 @@ ${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
    */
   protected _depthLevel: number;
 
+
+  protected _onPool   : Pool;
+  protected _oncePool : Pool;
+
   // Protected functions
   protected checkEventNameFormat(eventName: string = void 0): boolean {
     return eventName &&
       eventName.trim().length > 0 &&
       eventName.split(this._separator).length <= this._depthLevel;
+  }
+
+  protected initPoolValue(pool: Pool, segment): void {
+    if (!pool[segment]) {
+      pool[segment]       = {} as PoolValue ;
+      pool[segment].pool  = {} as Pool      ;
+      pool[segment].items = []              ;
+    }
+  }
+
+  protected addToPool(pool: Pool, segments: Array<string>, handler: Function, decorate: boolean): void {
+    let item = {} as PoolItem;
+    item.originalHandler = handler;
+
+    if (decorate === true) {
+
+    }
   }
 
   /**
@@ -106,6 +141,10 @@ ${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
     if (!this.checkEventNameFormat(eventName)) {
       throw Error(this._errors.eventNameBadFormat);
     }
+
+    const segments = eventName.split(this._separator);
+
+    this.addToPool(this._onPool, segments, handler, false);
   }
 
 }
