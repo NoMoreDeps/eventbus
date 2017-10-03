@@ -21,6 +21,7 @@
   "jest": {
     "mapCoverage": true,
     "verbose": true,
+    "collectCoverageFrom": ["src/**/*.ts"],
     "globals": {
       "ts-jest": {
         "tsConfigFile": "tsconfig.json"
